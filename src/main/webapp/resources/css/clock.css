@@ -1,0 +1,23 @@
+.top-right-clock-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+
+    /* Убедитесь, что элемент занимает всю необходимую ширину и ведет себя как блок */
+    display: block;
+}
+
+.clock {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 36px;
+    font-weight: bold;
+    color: #00FF00;
+    background-color: #000000;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-align: center;
+    letter-spacing: 2px;
+    display: inline-block;
+    box-shadow: 0 0 10px #00FF00;
+}

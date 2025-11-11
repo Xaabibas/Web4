@@ -1,0 +1,35 @@
+.axis {
+    stroke: white;
+}
+
+.figure {
+    stroke: white;
+    fill: deepskyblue;
+    fill-opacity: 0.8;
+}
+
+text {
+    fill: white;
+    font-size: 16px;
+}
+.hit {
+    stroke: limegreen;
+    fill: limegreen;
+    fill-opacity: 1;
+    filter: drop-shadow(0 0 4px limegreen);
+}
+
+.miss {
+    stroke: crimson;
+    fill: crimson;
+    fill-opacity: 1;
+    filter: drop-shadow(0 0 4px red);
+}
+
+.hit-text {
+    color: limegreen;
+}
+
+.miss-text {
+    color: red;
+}

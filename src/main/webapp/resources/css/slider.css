@@ -1,0 +1,16 @@
+.slider {
+    background-color: gray !important; // незаполненная часть
+}
+
+.slider .ui-slider-handle {
+    // background: orange !important; // внутренность ползунка
+    border-color: blue !important; // окружность ползунка
+}
+
+.slider .ui-slider-range {
+    background: navy !important; // заполненная часть
+}
+
+.slider.ui-slider-vertical {
+    width: 10px;
+}

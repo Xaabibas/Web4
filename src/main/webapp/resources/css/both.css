@@ -1,0 +1,48 @@
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+
+    background-color: #333;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+}
+
+footer a {
+    color: #007bff;
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid transparent;
+    transition: color 0.2s;
+    background-color: transparent;
+}
+
+footer a:hover {
+    color: #28a745;
+    background-color: transparent;
+    border-color: transparent;
+    transform: translateY(1px);
+}
+
+footer a:active {
+    color: #28a745;
+    background-color: transparent;
+    border-color: transparent;
+    transform: translateY(1px);
+}
+
+footer a:focus {
+    outline: 2px solid deepskyblue;
+    background-color: rgba(0, 191, 255, 0.2);
+}
+
+body {
+    padding-bottom: 50px;
+}
+
+::selection {
+    color: #15ff00;
+    background-color: rgba(0, 200, 255, 0.55);
+}
