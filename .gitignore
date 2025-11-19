@@ -36,3 +36,16 @@ build/
 
 ### Mac OS ###
 .DS_Store
+/front/.editorconfig
+/front/angular.json
+/front/package.json
+/front/package-lock.json
+/front/README.md
+/front/tsconfig.app.json
+/front/tsconfig.json
+/front/tsconfig.spec.json
+/front/.angular/
+/front/.vscode/
+/front/dist/
+/front/node_modules/
+/front/public/
