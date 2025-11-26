@@ -26,7 +26,7 @@ public class AttemptKeeper {
         LocalTime now = LocalTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         attempt.setStart(now.format(formatter));
-        attempt.setResult(checker.check(attempt));
+        attempt.setResult(checker.check(attempt.getPoint()));
         long workEnd = System.nanoTime();
         attempt.setWorkTime((workEnd - workStart) / 1_000);
     }

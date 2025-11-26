@@ -13,17 +13,8 @@ import java.io.Serializable;
 @ToString
 @NoArgsConstructor
 public class Attempt implements Serializable {
-
-    @JsonIgnore
-    private Checker checker = new Checker();
-
     private Point point = new Point();
-
     private boolean result;
-
-    @JsonIgnore
     private String start;
-
-    @JsonIgnore
     private long workTime;
 }

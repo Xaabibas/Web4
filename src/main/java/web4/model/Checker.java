@@ -1,8 +1,10 @@
 package web4.model;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class Checker {
-    public boolean check(Attempt attempt) {
-        Point point = attempt.getPoint();
+    public boolean check(Point point) {
         double x = point.getX();
         double y = point.getY();
         double r = point.getR();
