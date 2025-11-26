@@ -1,0 +1,26 @@
+<section>
+  <h2>Форма ввода данных</h2>
+
+  <form [formGroup]="userDataForm" (ngSubmit)="onSubmit()">
+
+    <div>
+      <label for="x">Параметр X:</label>
+      <input id="x" type="number" formControlName="x">
+    </div>
+
+    <div>
+      <label for="y">Параметр Y:</label>
+      <input id="y" type="number" formControlName="y">
+    </div>
+
+    <div>
+      <label for="r">Параметр R:</label>
+      <input id="r" type="number" formControlName="r">
+    </div>
+
+    <button type="submit" [disabled]="!userDataForm.valid">Отправить</button>
+  </form>
+</section>
+
+<p>abstract table</p> <!-- TODO: table with results -->
+<p>abstract svg</p> <!--TODO: interactive svg -->
