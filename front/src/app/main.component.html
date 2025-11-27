@@ -21,6 +21,31 @@
     <button type="submit" [disabled]="!userDataForm.valid">Отправить</button>
   </form>
 </section>
+<section>
+  <table>
+    <thead>
+    <tr>
+      <th>X</th>
+      <th>Y</th>
+      <th>R</th>
+      <th>Попадание</th>
+      <th>Время начала</th>
+      <th>Время работы</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let attempt of attempts">
+      <td>{{ attempt.point.x }}</td>
+      <td>{{ attempt.point.y }}</td>
+      <td>{{ attempt.point.r }}</td>
+      <td>
+        {{ attempt.result ? "Да" : "Нет" }}
+      </td>
+      <td>{{ attempt.start }}</td>
+      <td>{{ attempt.workTime}}</td>
+    </tr>
+    </tbody>
+  </table>
+</section>
 
-<p>abstract table</p> <!-- TODO: table with results -->
 <p>abstract svg</p> <!--TODO: interactive svg -->
