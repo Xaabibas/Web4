@@ -1,7 +1,12 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ElementRef, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
-import { CommonModule } from '@angular/common';
+import { CommonModule } from "@angular/common";
+
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatTableModule } from '@angular/material/table';
 
 import { Attempt } from "./attempt.interface";
 
@@ -9,20 +14,29 @@ import { Attempt } from "./attempt.interface";
 @Component({
   selector: "main-page",
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatTableModule
+  ],
   templateUrl: "./main.component.html",
   styleUrls: ["./styles/app.css"]
 })
 export class MainComponent implements OnInit {
   userDataForm!: FormGroup;
   attempts: Attempt[] = [];
+  @ViewChild("graph") graphElement!: ElementRef<SVGSVGElement>;
+  displayedColumns: string[] = ['x', 'y', 'r', 'result', 'start', 'workTime'];
 
-  viewBox: string = '0 0 500 500';
+  viewBox: string = "0 0 500 500";
   svgSize: number = 500;
   center: number = 250;
   scaleFactor: number = 40;
   rValue: number = 0;
-  areaPath: string = '';
+  areaPath: string = "";
 
   private apiURL = "http://localhost:8080/check"
   constructor(private http: HttpClient) {}
@@ -45,12 +59,12 @@ export class MainComponent implements OnInit {
         Validators.max(3)
       ]),
     });
-    this.userDataForm.get('r')?.valueChanges.subscribe(r => {
+    this.userDataForm.get("r")?.valueChanges.subscribe(r => {
       this.rValue = r;
       this.areaPath = this.generateAreaPath(r);
     });
 
-    this.rValue = this.userDataForm.get('r')?.value;
+    this.rValue = this.userDataForm.get("r")?.value;
     this.areaPath = this.generateAreaPath(this.rValue);
   }
 
@@ -72,9 +86,8 @@ export class MainComponent implements OnInit {
       }
     });
   }
-  generateAreaPath(R: number): string {
-    if (R <= 0) return '';
 
+  generateAreaPath(R: number): string {
     const p1 = `${this.toSvgX(-R)},${this.toSvgY(0)}`;
     const p2 = `${this.toSvgX(0)},${this.toSvgY(0)}`;
     const p3 = `${this.toSvgX(0)},${this.toSvgY(R)}`;
@@ -98,5 +111,34 @@ export class MainComponent implements OnInit {
 
   toSvgY(y: number): number {
     return this.center - (y * this.scaleFactor);
+  }
+
+handleGraphClick(event: MouseEvent) {
+    const svgElement = this.graphElement.nativeElement;
+
+    const CTM = svgElement.getScreenCTM();
+    if (!CTM) return;
+
+    const svgX = (event.clientX - CTM.e) / CTM.a;
+    const svgY = (event.clientY - CTM.f) / CTM.d;
+
+    const xCoord = this.fromSvgX(svgX);
+    const yCoord = this.fromSvgY(svgY);
+
+    const x = parseFloat(xCoord.toFixed(2));
+    const y = parseFloat(yCoord.toFixed(2));
+    const r = this.rValue;
+
+    this.userDataForm.patchValue({ x, y, r });
+
+    this.sendData({ x, y, r });
+  }
+
+  fromSvgX(svgX: number): number {
+    return (svgX - this.center) / this.scaleFactor;
+  }
+
+  fromSvgY(svgY: number): number {
+    return (this.center - svgY) / this.scaleFactor;
   }
 }
