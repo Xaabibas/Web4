@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import web4.model.Attempt;
+import web4.model.AttemptDAO;
 import web4.model.Checker;
 import web4.model.Point;
 
@@ -17,6 +18,8 @@ import java.time.format.DateTimeFormatter;
 public class CheckController {
     @Autowired
     private Checker checker;
+    @Autowired
+    private AttemptDAO dao;
     private final ObjectMapper mapper = new ObjectMapper();
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
@@ -36,6 +39,7 @@ public class CheckController {
         attempt.setResult(checker.check(point));
         long end = System.nanoTime();
         attempt.setWorkTime((end - start) / 1_000);
+        dao.save(attempt);
         return attempt;
     }
 }
