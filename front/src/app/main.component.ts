@@ -38,7 +38,8 @@ export class MainComponent implements OnInit {
   rValue: number = 0;
   areaPath: string = "";
 
-  private apiURL = "http://localhost:8080/check"
+  private checkURL = "http://localhost:8080/check";
+  private clearURL = "http://localhost:8080/clear";
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
@@ -77,9 +78,21 @@ export class MainComponent implements OnInit {
   }
 
   sendData(data: any) {
-    this.http.post(this.apiURL, data).subscribe({
+    this.http.post(this.checkURL, data).subscribe({
       next: (response: any) => {
         this.attempts = [response, ...this.attempts];
+      },
+      error: (error: any) => {
+        console.error("Ошибка при отправке данных:", error);
+      }
+    });
+  }
+
+  clear() {
+    this.http.delete(this.clearURL).subscribe({
+      next: (response: any) => {
+        this.attempts = [];
+        console.log(response);
       },
       error: (error: any) => {
         console.error("Ошибка при отправке данных:", error);

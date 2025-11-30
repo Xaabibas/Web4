@@ -23,6 +23,7 @@
         </mat-form-field>
 
         <button mat-raised-button color="accent" type="submit" [disabled]="!userDataForm.valid">Отправить</button>
+        <button mat-raised-button color="accent" type="button" (click)="clear()">Очистить</button>
       </form>
     </section>
 
