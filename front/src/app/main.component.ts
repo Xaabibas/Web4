@@ -40,6 +40,7 @@ export class MainComponent implements OnInit {
 
   private checkURL = "http://localhost:8080/check";
   private clearURL = "http://localhost:8080/clear";
+  private selectURL = "http://localhost:8080/select";
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
@@ -67,6 +68,15 @@ export class MainComponent implements OnInit {
 
     this.rValue = this.userDataForm.get("r")?.value;
     this.areaPath = this.generateAreaPath(this.rValue);
+
+    this.http.get(this.selectURL).subscribe({
+      next: (response: any) => {
+        this.attempts = response;
+      },
+      error: (error: any) => {
+        console.error("Ошибка при отправке данных:", error);
+      }
+    });
   }
 
   onSubmit() {
