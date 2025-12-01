@@ -19,6 +19,14 @@ public class AttemptDAO {
         repository.deleteAll();
     }
 
+    public List<Attempt> getSlice(int page, int size) {
+        return repository.getSlice(page * size, size);
+    }
+
+    public long count() {
+        return repository.count();
+    }
+
     public List<Attempt> getAll() {
         return (List<Attempt>) repository.findAll();
     }

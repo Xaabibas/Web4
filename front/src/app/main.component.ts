@@ -1,12 +1,13 @@
 import { Component, OnInit, ElementRef, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { CommonModule } from "@angular/common";
 
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatTableModule } from '@angular/material/table';
+import { MatInputModule } from "@angular/material/input";
+import { MatButtonModule } from "@angular/material/button";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatTableModule } from "@angular/material/table";
+import { MatPaginatorModule, PageEvent } from "@angular/material/paginator";
 
 import { Attempt } from "./attempt.interface";
 
@@ -20,7 +21,8 @@ import { Attempt } from "./attempt.interface";
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatTableModule
+    MatTableModule,
+    MatPaginatorModule
   ],
   templateUrl: "./main.component.html",
   styleUrls: ["./styles/app.css"]
@@ -29,7 +31,7 @@ export class MainComponent implements OnInit {
   userDataForm!: FormGroup;
   attempts: Attempt[] = [];
   @ViewChild("graph") graphElement!: ElementRef<SVGSVGElement>;
-  displayedColumns: string[] = ['x', 'y', 'r', 'result', 'start', 'workTime'];
+  displayedColumns: string[] = ["x", "y", "r", "result", "start", "workTime"];
 
   viewBox: string = "0 0 500 500";
   svgSize: number = 500;
@@ -37,6 +39,11 @@ export class MainComponent implements OnInit {
   scaleFactor: number = 40;
   rValue: number = 0;
   areaPath: string = "";
+
+
+  pageSize: number = 10;
+  pageIndex: number = 0;
+  totalAttempts: number = 0;
 
   private checkURL = "http://localhost:8080/check";
   private clearURL = "http://localhost:8080/clear";
@@ -69,14 +76,30 @@ export class MainComponent implements OnInit {
     this.rValue = this.userDataForm.get("r")?.value;
     this.areaPath = this.generateAreaPath(this.rValue);
 
-    this.http.get(this.selectURL).subscribe({
-      next: (response: any) => {
-        this.attempts = response;
+    this.loadAttempts();
+  }
+
+  loadAttempts() {
+    const params = new HttpParams()
+        .set('page', this.pageIndex.toString())
+        .set('size', this.pageSize.toString());
+
+    this.http.get<{ content: Attempt[], totalElements: number }>(this.selectURL, { params }).subscribe({
+      next: (response) => {
+        this.attempts = response.content;
+        this.totalAttempts = 0;
+        this.totalAttempts = response.totalElements;
       },
       error: (error: any) => {
-        console.error("Ошибка при отправке данных:", error);
+        console.error("Ошибка загрузки данных:", error);
       }
     });
+}
+
+  handlePageEvent(event: PageEvent) {
+    this.pageSize = event.pageSize;
+    this.pageIndex = event.pageIndex;
+    this.loadAttempts();
   }
 
   onSubmit() {
@@ -90,7 +113,7 @@ export class MainComponent implements OnInit {
   sendData(data: any) {
     this.http.post(this.checkURL, data).subscribe({
       next: (response: any) => {
-        this.attempts = [response, ...this.attempts];
+        this.loadAttempts();
       },
       error: (error: any) => {
         console.error("Ошибка при отправке данных:", error);
@@ -136,7 +159,7 @@ export class MainComponent implements OnInit {
     return this.center - (y * this.scaleFactor);
   }
 
-handleGraphClick(event: MouseEvent) {
+  handleGraphClick(event: MouseEvent) {
     const svgElement = this.graphElement.nativeElement;
 
     const CTM = svgElement.getScreenCTM();

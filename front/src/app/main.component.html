@@ -63,6 +63,15 @@
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>
+
+      <mat-paginator
+        [length]="totalAttempts"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10]"
+        (page)="handlePageEvent($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+
     </section>
   </div>
 
