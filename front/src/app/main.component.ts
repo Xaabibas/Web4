@@ -1,100 +1,58 @@
-import { Component, OnInit, ElementRef, ViewChild } from "@angular/core";
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { CommonModule } from "@angular/common";
-
-import { MatInputModule } from "@angular/material/input";
-import { MatButtonModule } from "@angular/material/button";
-import { MatFormFieldModule } from "@angular/material/form-field";
+import { PageEvent, MatPaginatorModule } from "@angular/material/paginator";
 import { MatTableModule } from "@angular/material/table";
-import { MatPaginatorModule, PageEvent } from "@angular/material/paginator";
+import { HttpClientModule } from "@angular/common/http";
 
-import { Attempt } from "./attempt.interface";
+import { AttemptService } from "./attempt.service";
 
+import { Attempt } from "./attempt/attempt.interface";
+import { GraphComponent } from "./graph/graph.component";
+import { FormComponent } from "./form/form.component";
 
 @Component({
   selector: "main-page",
   standalone: true,
   imports: [
-    ReactiveFormsModule,
     CommonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    GraphComponent,
+    FormComponent,
+    HttpClientModule
   ],
   templateUrl: "./main.component.html",
   styleUrls: ["./styles/app.css"]
 })
 export class MainComponent implements OnInit {
-  userDataForm!: FormGroup;
   attempts: Attempt[] = [];
-  @ViewChild("graph") graphElement!: ElementRef<SVGSVGElement>;
   displayedColumns: string[] = ["x", "y", "r", "result", "start", "workTime"];
 
-  viewBox: string = "0 0 500 500";
-  svgSize: number = 500;
-  center: number = 250;
-  scaleFactor: number = 40;
-  rValue: number = 0;
-  areaPath: string = "";
+  @ViewChild(FormComponent) formComponent!: FormComponent;
 
+  rValue: number = 1;
 
   pageSize: number = 10;
   pageIndex: number = 0;
   totalAttempts: number = 0;
 
-  private checkURL = "http://localhost:8080/check";
-  private clearURL = "http://localhost:8080/clear";
-  private selectURL = "http://localhost:8080/select";
-  constructor(private http: HttpClient) {}
+  constructor(private attemptService: AttemptService) {}
 
   ngOnInit(): void {
-    this.userDataForm = new FormGroup({
-      x: new FormControl(0, [
-        Validators.required,
-        Validators.min(-5),
-        Validators.max(3)
-      ]),
-      y: new FormControl(0, [
-        Validators.required,
-        Validators.min(-5),
-        Validators.max(5)
-      ]),
-      r: new FormControl(0, [
-        Validators.required,
-        Validators.min(-5),
-        Validators.max(3)
-      ]),
-    });
-    this.userDataForm.get("r")?.valueChanges.subscribe(r => {
-      this.rValue = r;
-      this.areaPath = this.generateAreaPath(r);
-    });
-
-    this.rValue = this.userDataForm.get("r")?.value;
-    this.areaPath = this.generateAreaPath(this.rValue);
-
     this.loadAttempts();
   }
 
   loadAttempts() {
-    const params = new HttpParams()
-        .set('page', this.pageIndex.toString())
-        .set('size', this.pageSize.toString());
-
-    this.http.get<{ content: Attempt[], totalElements: number }>(this.selectURL, { params }).subscribe({
+    this.attemptService.loadAttempts(this.pageIndex, this.pageSize).subscribe({
       next: (response) => {
         this.attempts = response.content;
-        this.totalAttempts = 0;
         this.totalAttempts = response.totalElements;
       },
       error: (error: any) => {
         console.error("Ошибка загрузки данных:", error);
       }
     });
-}
+  }
 
   handlePageEvent(event: PageEvent) {
     this.pageSize = event.pageSize;
@@ -102,17 +60,25 @@ export class MainComponent implements OnInit {
     this.loadAttempts();
   }
 
-  onSubmit() {
-    if (this.userDataForm.valid) {
-        this.sendData(this.userDataForm.value);
-      } else {
-        console.error("Форма содержит ошибки валидации.");
-      }
+  handleSubmit(data: any) {
+
+    this.sendData(data);
+  }
+
+  handleGraphClick(data: { x: number; y: number; r: number }) {
+
+    this.formComponent.patchValues(data.x, data.y, this.rValue);
+
+    this.sendData({ x: data.x, y: data.y, r: this.rValue });
+  }
+
+  handleRChange(r: number) {
+    this.rValue = r;
   }
 
   sendData(data: any) {
-    this.http.post(this.checkURL, data).subscribe({
-      next: (response: any) => {
+    this.attemptService.sendAttempt(data).subscribe({
+      next: () => {
         this.loadAttempts();
       },
       error: (error: any) => {
@@ -121,70 +87,15 @@ export class MainComponent implements OnInit {
     });
   }
 
-  clear() {
-    this.http.delete(this.clearURL).subscribe({
-      next: (response: any) => {
+  handleClear() {
+    this.attemptService.clearAttempts().subscribe({
+      next: () => {
         this.attempts = [];
-        console.log(response);
+        this.totalAttempts = 0;
       },
       error: (error: any) => {
-        console.error("Ошибка при отправке данных:", error);
+        console.error("Ошибка при очистке данных:", error);
       }
     });
-  }
-
-  generateAreaPath(R: number): string {
-    const p1 = `${this.toSvgX(-R)},${this.toSvgY(0)}`;
-    const p2 = `${this.toSvgX(0)},${this.toSvgY(0)}`;
-    const p3 = `${this.toSvgX(0)},${this.toSvgY(R)}`;
-    const triangle = `M ${p1} L ${p2} L ${p3} Z`;
-
-    const p4 = `${this.toSvgX(0)},${this.toSvgY(0)}`;
-    const p5 = `${this.toSvgX(R/2)},${this.toSvgY(0)}`;
-    const p6 = `${this.toSvgX(R/2)},${this.toSvgY(-R)}`;
-    const p7 = `${this.toSvgX(0)},${this.toSvgY(-R)}`;
-    const rect = `M ${p4} L ${p5} L ${p6} L ${p7} Z`;
-
-    const rArc = Math.abs(this.scaleFactor * (R / 2));
-    const arc = `M ${this.toSvgX(R/2)},${this.toSvgY(0)} A ${rArc} ${rArc} 0 0 0 ${this.toSvgX(0)},${this.toSvgY(R/2)} L ${this.toSvgX(0)},${this.toSvgY(0)} Z`;
-
-    return `${triangle} ${rect} ${arc}`;
-  }
-
-  toSvgX(x: number): number {
-    return this.center + (x * this.scaleFactor);
-  }
-
-  toSvgY(y: number): number {
-    return this.center - (y * this.scaleFactor);
-  }
-
-  handleGraphClick(event: MouseEvent) {
-    const svgElement = this.graphElement.nativeElement;
-
-    const CTM = svgElement.getScreenCTM();
-    if (!CTM) return;
-
-    const svgX = (event.clientX - CTM.e) / CTM.a;
-    const svgY = (event.clientY - CTM.f) / CTM.d;
-
-    const xCoord = this.fromSvgX(svgX);
-    const yCoord = this.fromSvgY(svgY);
-
-    const x = parseFloat(xCoord.toFixed(2));
-    const y = parseFloat(yCoord.toFixed(2));
-    const r = this.rValue;
-
-    this.userDataForm.patchValue({ x, y, r });
-
-    this.sendData({ x, y, r });
-  }
-
-  fromSvgX(svgX: number): number {
-    return (svgX - this.center) / this.scaleFactor;
-  }
-
-  fromSvgY(svgY: number): number {
-    return (this.center - svgY) / this.scaleFactor;
   }
 }
