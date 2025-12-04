@@ -1,0 +1,39 @@
+@use '@angular/material' as mat;
+
+// Подключаем core стили
+@include mat.core();
+
+// --- Светлая тема ---
+$light-theme: mat.define-theme((
+  color: (
+    primary: mat.$cyan-palette,
+    tertiary: mat.$orange-palette,
+  ),
+  density: (
+      scale: 0
+  ),
+));
+
+.light-theme {
+  @include mat.all-component-themes($light-theme);
+  @include mat.typography-hierarchy($light-theme);
+  color-scheme: light;
+}
+
+// --- Тёмная тема ---
+$dark-theme: mat.define-theme((
+  color: (
+    primary: mat.$cyan-palette,
+    tertiary: mat.$orange-palette,
+  ),
+  density: (
+      scale: 0
+  ),
+));
+
+.dark-theme {
+  color-scheme: dark;
+  background-color: var(--mat-sys-background);
+  @include mat.all-component-themes($dark-theme);
+  @include mat.typography-hierarchy($dark-theme);
+}

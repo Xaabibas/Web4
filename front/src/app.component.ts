@@ -1,17 +1,16 @@
-import { Component } from "@angular/core";
-import { RouterOutlet, RouterLink, RouterLinkActive } from "@angular/router";
-import { CommonModule } from "@angular/common";
+import { Component } from '@angular/core';
+import { ThemeService } from './app/services/theme.service';
+import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: "app-root",
+  selector: 'app-root',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet
-  ],
-  template: `<router-outlet></router-outlet>`,
-  styleUrls: ["./styles.css"]
+  imports: [CommonModule, RouterModule],
+  template: `
+    <router-outlet></router-outlet>
+  `,
 })
 export class AppComponent {
-
+  constructor(public themeService: ThemeService) {}
 }

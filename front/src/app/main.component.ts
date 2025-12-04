@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { PageEvent, MatPaginatorModule } from "@angular/material/paginator";
 import { MatTableModule } from "@angular/material/table";
+import { MatToolbarModule } from "@angular/material/toolbar";
+import { MatButtonModule } from "@angular/material/button";
 import { HttpClientModule } from "@angular/common/http";
 
 import { AttemptService } from "./services/attempt.service";
@@ -18,6 +20,8 @@ import { FormComponent } from "./form/form.component";
     CommonModule,
     MatTableModule,
     MatPaginatorModule,
+    MatToolbarModule,
+    MatButtonModule,
     GraphComponent,
     FormComponent,
     HttpClientModule

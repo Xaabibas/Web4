@@ -15,13 +15,31 @@
 .auth-card {
   max-width: 90%;
   width: 100%;
-  padding: 15px;
+  padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.auth-card h2 {
+    margin-bottom: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+.form-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .input-group {
     width: 100%;
+    max-width: 300px;
     margin-bottom: 15px;
 }
 
@@ -55,6 +73,24 @@ input {
   flex-direction: column;
   gap: 10px;
   margin-top: 20px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.button-group button {
+    width: 100%;
+}
+
+.form-group nav {
+    margin-top: 15px;
+    width: 100%;
+    text-align: center;
+}
+
+.server-error {
+    margin-top: 15px;
+    text-align: center;
+    width: 100%;
 }
 
 @media (min-width: 866px) and (max-width: 1224px) {
@@ -64,6 +100,10 @@ input {
   .auth-card {
     max-width: 500px;
     padding: 30px;
+  }
+  .input-group,
+  .button-group {
+    max-width: 350px;
   }
   .button-group {
     flex-direction: row;
@@ -78,6 +118,10 @@ input {
   .auth-card {
     max-width: 400px;
     padding: 30px;
+  }
+  .input-group,
+  .button-group {
+    max-width: 300px;
   }
   .button-group {
     flex-direction: row;

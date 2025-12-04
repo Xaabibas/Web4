@@ -1,0 +1,4 @@
+<button mat-button (click)="themeService.toggleTheme()">
+  {{ themeService.isDarkTheme() ? 'Светлая тема' : 'Темная тема' }}
+</button>
+<router-outlet></router-outlet>

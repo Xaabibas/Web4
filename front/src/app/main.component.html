@@ -1,10 +1,11 @@
-<header class="app-header">
-  <h1>Основная страница приложения</h1>
-</header>
+<mat-toolbar color="primary">
+  <span>Основная страница приложения</span>
 
-<div class="legt-content-wrapper">
-  <button (click)="onLogout()" class="logout-button" style="right-padding=10px;">Выход</button>
-</div>
+  <span class="spacer"></span>
+
+  <button mat-raised-button color="primary" (click)="onLogout()">Выход</button>
+</mat-toolbar>
+
 
 <div class="main-content-layout">
 
