@@ -2,7 +2,9 @@ package web4.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,10 +28,10 @@ public class CheckController {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     @PostMapping("/check")
-    public String check(@RequestBody Point point) throws JsonProcessingException {
+    public ResponseEntity<String> check(@RequestBody Point point) throws JsonProcessingException {
         Attempt attempt = processRequest(point);
         System.out.println(mapper.writeValueAsString(attempt));
-        return mapper.writeValueAsString(attempt);
+        return ResponseEntity.ok(mapper.writeValueAsString(attempt));
     }
 
     private Attempt processRequest(Point point) {

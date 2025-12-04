@@ -15,7 +15,7 @@ import web4.user.UserRequest;
 import web4.user.UserService;
 
 @RestController
-public class AuthenticationController {
+public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
     @Autowired
@@ -23,18 +23,14 @@ public class AuthenticationController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/authenticate")
+    @PostMapping("/auth")
     public ResponseEntity<?> authenticate(@RequestBody UserRequest request) {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            request.getUsername(),
-                            request.getPassword()
-                    )
-            );
-        } catch (BadCredentialsException e) {
-            return ResponseEntity.status(401).body("Неверный логин или пароль(");
-        }
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getUsername(),
+                        request.getPassword()
+                )
+        );
         final UserDetails userDetails = userService.loadUserByUsername(request.getUsername());
         final String jwt = jwtUtil.generateToken(userDetails);
 

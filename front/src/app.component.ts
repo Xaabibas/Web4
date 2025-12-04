@@ -7,18 +7,9 @@ import { CommonModule } from "@angular/common";
   standalone: true,
   imports: [
     CommonModule,
-    RouterOutlet,
-    RouterLink,
-    RouterLinkActive
+    RouterOutlet
   ],
-  template: `
-      <nav style="padding: 10px; background-color: #f0f0f0;">
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Главная страница</a> |
-        <a routerLink="/main" routerLinkActive="active">Страница с формой</a>
-      </nav>
-      <hr>
-
-      <router-outlet></router-outlet>`,
+  template: `<router-outlet></router-outlet>`,
   styleUrls: ["./styles.css"]
 })
 export class AppComponent {

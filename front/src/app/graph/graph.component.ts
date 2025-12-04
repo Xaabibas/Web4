@@ -10,7 +10,7 @@ import {
   ElementRef,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { Attempt } from "../attempt/attempt.interface";
+import { Attempt } from "../interfaces/attempt.interface";
 
 @Component({
   selector: "app-graph",

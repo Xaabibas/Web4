@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { Attempt } from "./attempt/attempt.interface";
+import { Attempt } from "../interfaces/attempt.interface";
 
 interface PaginatedAttempts {
   content: Attempt[];

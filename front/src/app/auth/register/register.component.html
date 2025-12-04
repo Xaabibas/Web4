@@ -1,0 +1,45 @@
+<div class="auth-container">
+  <header class="header">
+    <h1>Лабораторная работа №4</h1>
+    <p>Хабировт Тимур Рустемович | P3232 | Вариант 32891</p>
+  </header>
+
+  <div class="auth-card">
+    <h2>Регистрация</h2>
+
+    <form [formGroup]="authForm" (ngSubmit)="onRegister()" class="form-group">
+
+      <div class="input-group">
+        <mat-form-field appearance="fill">
+          <mat-label for="username">Логин:</mat-label>
+          <input matInput id="username" type="text" formControlName="username">
+        </mat-form-field>
+        <div *ngIf="authForm.get('username')?.invalid && authForm.get('username')?.touched" class="error-message">
+          Логин обязателен.
+        </div>
+      </div>
+
+      <div class="input-group">
+        <mat-form-field appearance="fill">
+          <mat-label for="password">Пароль:</mat-label>
+          <input matInput id="password" type="password" formControlName="password">
+        </mat-form-field>
+        <div *ngIf="authForm.get('password')?.invalid && authForm.get('password')?.touched" class="error-message">
+          Пароль обязателен
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button mat-raised-button type="submit" [disabled]="!authForm.valid">
+          Регистрация
+        </button>
+      </div>
+
+      <nav style="padding: 10px; background-color: #f0f0f0;">
+        Уже смешарик? <a routerLink="/login" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Войти</a>
+      </nav>
+    </form>
+
+    <p *ngIf="errorMessage" class="server-error">{{ errorMessage }}</p>
+  </div>
+</div>

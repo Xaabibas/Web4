@@ -4,9 +4,10 @@ import { PageEvent, MatPaginatorModule } from "@angular/material/paginator";
 import { MatTableModule } from "@angular/material/table";
 import { HttpClientModule } from "@angular/common/http";
 
-import { AttemptService } from "./attempt.service";
+import { AttemptService } from "./services/attempt.service";
+import { AuthService } from "./services/auth.service";
 
-import { Attempt } from "./attempt/attempt.interface";
+import { Attempt } from "./interfaces/attempt.interface";
 import { GraphComponent } from "./graph/graph.component";
 import { FormComponent } from "./form/form.component";
 
@@ -36,7 +37,7 @@ export class MainComponent implements OnInit {
   pageIndex: number = 0;
   totalAttempts: number = 0;
 
-  constructor(private attemptService: AttemptService) {}
+  constructor(private attemptService: AttemptService, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.loadAttempts();
@@ -61,14 +62,11 @@ export class MainComponent implements OnInit {
   }
 
   handleSubmit(data: any) {
-
     this.sendData(data);
   }
 
   handleGraphClick(data: { x: number; y: number; r: number }) {
-
     this.formComponent.patchValues(data.x, data.y, this.rValue);
-
     this.sendData({ x: data.x, y: data.y, r: this.rValue });
   }
 
@@ -97,5 +95,9 @@ export class MainComponent implements OnInit {
         console.error("Ошибка при очистке данных:", error);
       }
     });
+  }
+
+  onLogout(): void {
+    this.authService.logout();
   }
 }
