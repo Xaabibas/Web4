@@ -7,7 +7,7 @@ import { AuthRequest, AuthResponse } from "../interfaces/auth.interface";
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
-  private apiUrl = "http://localhost:8080";
+  private apiUrl = "http://localhost:8080/api";
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -37,6 +37,6 @@ export class AuthService {
 
   public logout(): void {
     localStorage.removeItem("jwt_token");
-    this.router.navigate(['/auth']);
+    this.router.navigate(["/login"]);
   }
 }

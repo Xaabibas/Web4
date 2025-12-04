@@ -1,17 +1,25 @@
 package web4.controllers;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpMediaTypeException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.yaml.snakeyaml.constructor.DuplicateKeyException;
 
 import java.util.Map;
 
 @RestControllerAdvice
 public class AppExceptionHandler {
+    @ExceptionHandler(DuplicateKeyException.class)
+    public ResponseEntity<Map<String, String>> handleConflictError(DuplicateKeyException e) {
+        return generateErrorResponse(
+                HttpStatus.CONFLICT,
+                e.getMessage()
+        );
+    }
+
     private ResponseEntity<Map<String, String>> generateErrorResponse(HttpStatus status, String message) {
         return ResponseEntity.status(status).body(
                 Map.of("error", status.getReasonPhrase(), "message", message)
@@ -26,19 +34,11 @@ public class AppExceptionHandler {
         );
     }
 
-    @ExceptionHandler(DuplicateKeyException.class)
-    public ResponseEntity<Map<String, String>> handleConflictError(DuplicateKeyException e) {
-        return generateErrorResponse(
-                HttpStatus.CONFLICT,
-                e.getMessage()
-        );
-    }
-
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<Map<String, String>> handleUsernameNotFoundException(AuthenticationException e) {
         return generateErrorResponse(
                 HttpStatus.UNAUTHORIZED,
-                "Срок действия токен истек или токен недействителен. Пожалуйста, пройдите процесс авторизации заново"
+                "Неверное имя пользователя или пароль"
         );
     }
 

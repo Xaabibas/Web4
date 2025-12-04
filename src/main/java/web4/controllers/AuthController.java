@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import web4.jwt.JwtResponse;
 import web4.jwt.JwtUtil;
@@ -15,6 +16,7 @@ import web4.user.UserRequest;
 import web4.user.UserService;
 
 @RestController
+@RequestMapping("/api")
 public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
