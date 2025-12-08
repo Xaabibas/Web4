@@ -10,3 +10,9 @@ interface Point {
   y: number;
   r: number;
 }
+
+export interface GraphPoint {
+  x: number;
+  y: number;
+  result: boolean;
+}

@@ -1,11 +1,16 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { Attempt } from "../interfaces/attempt.interface";
+import { map } from "rxjs/operators";
+import { Attempt, GraphPoint } from "../interfaces/attempt.interface";
 
 interface PaginatedAttempts {
   content: Attempt[];
   totalElements: number;
+}
+
+interface GraphResponse {
+  content: GraphPoint[];
 }
 
 @Injectable({
@@ -32,5 +37,10 @@ export class AttemptService {
 
   clearAttempts(): Observable<any> {
     return this.http.delete(this.clearURL);
+  }
+
+  getGraphPoints(): Observable<GraphPoint[]> {
+    return this.http.get<GraphResponse>(`${this.selectURL}/graph`)
+      .pipe(map(res => res.content));
   }
 }

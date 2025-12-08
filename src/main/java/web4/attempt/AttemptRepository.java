@@ -19,5 +19,8 @@ public interface AttemptRepository extends CrudRepository<Attempt, Long> {
     @Query("SELECT COUNT(*) FROM attempts WHERE username = :username")
     long countByUsername(String username);
 
+    @Query("SELECT x, y, result FROM attempts WHERE username = :username")
+    List<GraphPointDTO> getPointsForGraph(String username);
+
     List<Attempt> findAllByUsername(String username);
 }

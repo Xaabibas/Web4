@@ -55,7 +55,8 @@ public class AppExceptionHandler {
     public ResponseEntity<Map<String, String>> handleIternalServerError(Exception e) {
         return generateErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR,
-                "Непредвиденная ошибка сервера. Пожалуйста, поробуйте обратиться позже"
+//                "Непредвиденная ошибка сервера. Пожалуйста, поробуйте обратиться позже"
+                e.getMessage()
         );
     }
 }

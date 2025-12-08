@@ -50,6 +50,15 @@ public class AttemptService {
         return repository.getSliceByUsername(page * size, size, username);
     }
 
+    public List<GraphPointDTO> getPointsForGraph(String username) {
+        try {
+            return repository.getPointsForGraph(username);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw e;
+        }
+    }
+
     public long count(String username) {
         return repository.countByUsername(username);
     }

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import web4.PageResponse;
+import web4.attempt.GraphPointDTO;
 import web4.jwt.JwtUtil;
 import web4.attempt.Attempt;
 import web4.attempt.AttemptService;
@@ -21,18 +23,23 @@ public class SelectController {
     private JwtUtil jwtUtil;
     private final ObjectMapper mapper = new ObjectMapper();
 
-    public class Data {
-        public List<Attempt> content;
-        public long totalElements;
-    }
-
     @GetMapping("/select")
     public ResponseEntity<?> get(Pageable pageable, @RequestHeader("Authorization") String header) throws JsonProcessingException {
         String username = jwtUtil.getUsernameFromHeader(header);
-        List<Attempt> list = service.getSlice(pageable.getPageNumber(), pageable.getPageSize(), username);
-        Data data = new Data();
-        data.content = list;
-        data.totalElements = service.count(username);
-        return ResponseEntity.ok(mapper.writeValueAsString(data));
+        PageResponse response = new PageResponse(
+                service.getSlice(pageable.getPageNumber(), pageable.getPageSize(), username),
+                service.count(username)
+        );
+        return ResponseEntity.ok(mapper.writeValueAsString(response));
+    }
+
+    @GetMapping("/select/graph")
+    public ResponseEntity<?> graph(@RequestHeader("Authorization") String header) throws JsonProcessingException {
+        String username = jwtUtil.getUsernameFromHeader(header);
+        PageResponse response = new PageResponse(
+                service.getPointsForGraph(username),
+                service.count(username)
+        );
+        return ResponseEntity.ok(mapper.writeValueAsString(response));
     }
 }

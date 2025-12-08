@@ -9,7 +9,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { AttemptService } from "./services/attempt.service";
 import { AuthService } from "./services/auth.service";
 
-import { Attempt } from "./interfaces/attempt.interface";
+import { Attempt, GraphPoint } from "./interfaces/attempt.interface";
 import { GraphComponent } from "./graph/graph.component";
 import { FormComponent } from "./form/form.component";
 
@@ -31,6 +31,7 @@ import { FormComponent } from "./form/form.component";
 })
 export class MainComponent implements OnInit {
   attempts: Attempt[] = [];
+  graphPoints: GraphPoint[] = [];
   displayedColumns: string[] = ["x", "y", "r", "result", "start", "workTime"];
 
   @ViewChild(FormComponent) formComponent!: FormComponent;
@@ -45,6 +46,7 @@ export class MainComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadAttempts();
+    this.loadGraphPoints();
   }
 
   loadAttempts() {
@@ -56,6 +58,15 @@ export class MainComponent implements OnInit {
       error: (error: any) => {
         console.error("Ошибка загрузки данных:", error);
       }
+    });
+  }
+
+  loadGraphPoints() {
+    this.attemptService.getGraphPoints().subscribe({
+      next: (points) => {
+        this.graphPoints = points;
+      },
+      error: (err) => console.error("Ошибка графика:", err)
     });
   }
 
@@ -82,6 +93,7 @@ export class MainComponent implements OnInit {
     this.attemptService.sendAttempt(data).subscribe({
       next: () => {
         this.loadAttempts();
+        this.loadGraphPoints();
       },
       error: (error: any) => {
         console.error("Ошибка при отправке данных:", error);

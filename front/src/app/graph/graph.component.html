@@ -13,11 +13,11 @@
 
   <path [attr.d]="areaPath" fill="blue" opacity="0.5"/>
 
-  <circle *ngFor="let attempt of attempts"
-          [attr.cx]="toSvgX(attempt.point.x)"
-          [attr.cy]="toSvgY(attempt.point.y)"
+  <circle *ngFor="let point of points"
+          [attr.cx]="toSvgX(point.x)"
+          [attr.cy]="toSvgY(point.y)"
           r="4"
-          [attr.fill]="attempt.result ? 'green' : 'red'">
+          [attr.fill]="point.result ? 'green' : 'red'">
   </circle>
 
   <g>

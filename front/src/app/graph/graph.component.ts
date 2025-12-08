@@ -10,7 +10,7 @@ import {
   ElementRef,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { Attempt } from "../interfaces/attempt.interface";
+import { Attempt, GraphPoint } from "../interfaces/attempt.interface";
 
 @Component({
   selector: "app-graph",
@@ -21,7 +21,7 @@ import { Attempt } from "../interfaces/attempt.interface";
 })
 export class GraphComponent implements OnInit, OnChanges {
   @Input() R: number = 0;
-  @Input() attempts: Attempt[] = [];
+  @Input() points: GraphPoint[] = [];
   @Output() graphClick = new EventEmitter<{ x: number; y: number; r: number }>();
   @ViewChild("graph") graphElement!: ElementRef<SVGSVGElement>;
 
