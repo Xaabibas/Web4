@@ -1,6 +1,5 @@
 package web4.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,11 +18,9 @@ import web4.jwt.JwtRequestFilter;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    @Autowired
-    private JwtRequestFilter filter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtRequestFilter filter) throws Exception {
         http.authorizeHttpRequests(
                 authorize -> authorize
                         .requestMatchers("/api/register", "/api/login", "/api/auth").permitAll()

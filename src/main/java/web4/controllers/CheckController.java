@@ -2,48 +2,27 @@ package web4.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import web4.model.Attempt;
-import web4.model.AttemptDAO;
-import web4.model.Checker;
-import web4.model.Point;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import org.springframework.web.bind.annotation.*;
+import web4.jwt.JwtUtil;
+import web4.attempt.Attempt;
+import web4.attempt.AttemptService;
+import web4.attempt.Point;
 
 @RestController
 @RequestMapping("/api")
 public class CheckController {
     @Autowired
-    private Checker checker;
-    @Autowired
-    private AttemptDAO dao;
+    private AttemptService service;
     private final ObjectMapper mapper = new ObjectMapper();
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @PostMapping("/check")
-    public ResponseEntity<String> check(@RequestBody Point point) throws JsonProcessingException {
-        Attempt attempt = processRequest(point);
-        System.out.println(mapper.writeValueAsString(attempt));
+    public ResponseEntity<String> check(@RequestBody Point point, @RequestHeader("Authorization") String header) throws JsonProcessingException {
+        String username = jwtUtil.getUsernameFromHeader(header);
+        Attempt attempt = service.process(point, username);
         return ResponseEntity.ok(mapper.writeValueAsString(attempt));
-    }
-
-    private Attempt processRequest(Point point) {
-        LocalDateTime date = LocalDateTime.now();
-        long start = System.nanoTime();
-        Attempt attempt = new Attempt();
-        attempt.setPoint(point);
-        attempt.setStart(date.format(formatter));
-        attempt.setResult(checker.check(point));
-        long end = System.nanoTime();
-        attempt.setWorkTime((end - start) / 1_000);
-        dao.save(attempt);
-        return attempt;
     }
 }

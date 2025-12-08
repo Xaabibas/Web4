@@ -1,4 +1,4 @@
-package web4.model;
+package web4.attempt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

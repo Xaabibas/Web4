@@ -1,4 +1,4 @@
-package web4.model;
+package web4.attempt;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,4 +25,5 @@ public class Attempt implements Serializable {
     private String start;
     @Column(value="worktime")
     private long workTime;
+    private String username;
 }

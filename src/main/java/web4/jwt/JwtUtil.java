@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import web4.user.UserService;
 
@@ -24,7 +24,6 @@ import java.util.function.Function;
 public class JwtUtil {
     @Autowired
     private UserService userService;
-
     @Value("${jwt.secret}")
     private String SECRET_KEY;
     private final long EXPIRATION_TIME = 24 * 60 * 60 * 1000;
@@ -68,6 +67,14 @@ public class JwtUtil {
 
     public String getUsername(String token) {
         return getClaims(token, Claims::getSubject);
+    }
+
+    public String getUsernameFromHeader(String header) {
+        if (header != null && header.startsWith("Bearer ")) {
+            header = header.substring(7);
+            return getUsername(header);
+        }
+        return null; // плохо
     }
 
     public Date getExpirationDate(String token) {

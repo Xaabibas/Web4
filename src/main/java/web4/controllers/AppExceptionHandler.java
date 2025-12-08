@@ -1,28 +1,37 @@
 package web4.controllers;
 
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpMediaTypeException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import web4.exceptions.ConflictException;
+import web4.exceptions.UnprocessableEntityException;
 
 import java.util.Map;
 
 @RestControllerAdvice
 public class AppExceptionHandler {
-    @ExceptionHandler(DuplicateKeyException.class)
-    public ResponseEntity<Map<String, String>> handleConflictError(DuplicateKeyException e) {
+    private ResponseEntity<Map<String, String>> generateErrorResponse(HttpStatus status, String message) {
+        return ResponseEntity.status(status).body(
+                Map.of("error", status.getReasonPhrase(), "message", message)
+        );
+    }
+
+    @ExceptionHandler(UnprocessableEntityException.class)
+    public ResponseEntity<Map<String, String>> handleUnprocessableEntity(UnprocessableEntityException e) {
         return generateErrorResponse(
-                HttpStatus.CONFLICT,
+                HttpStatus.UNPROCESSABLE_ENTITY,
                 e.getMessage()
         );
     }
 
-    private ResponseEntity<Map<String, String>> generateErrorResponse(HttpStatus status, String message) {
-        return ResponseEntity.status(status).body(
-                Map.of("error", status.getReasonPhrase(), "message", message)
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<Map<String, String>> handleConflictError(ConflictException e) {
+        return generateErrorResponse(
+                HttpStatus.CONFLICT,
+                e.getMessage()
         );
     }
 
