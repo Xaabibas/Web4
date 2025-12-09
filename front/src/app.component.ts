@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
-import { ThemeService } from './app/services/theme.service';
-import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { Component } from "@angular/core";
+import { ThemeService } from "./app/services/theme.service";
+import { RouterModule } from "@angular/router";
+import { CommonModule } from "@angular/common";
 
 @Component({
-  selector: 'app-root',
+  selector: "app-root",
   standalone: true,
   imports: [CommonModule, RouterModule],
   template: `

@@ -6,13 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import web4.PageResponse;
-import web4.attempt.GraphPointDTO;
+import web4.attempt.PageResponse;
 import web4.jwt.JwtUtil;
-import web4.attempt.Attempt;
 import web4.attempt.AttemptService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api")

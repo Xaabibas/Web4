@@ -7,7 +7,7 @@
 }
 
 .spacer {
-  flex: 1 1 auto;
+    flex: 1 1 auto;
 }
 
 
@@ -90,7 +90,11 @@ mat-table {
     font-size: 24px;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 866px) {
+    form button {
+        width: 40%;
+    }
+
     .main-content-layout {
         flex-direction: column;
         align-items: center;
@@ -98,7 +102,23 @@ mat-table {
 
     .left-content-wrapper,
     .right-content-wrapper {
-        max-width: 90%;
+        max-width: 80%;
+        width: 100%;
+        margin-left: 0;
+        margin-bottom: 24px;
+        align-items: center;
+    }
+}
+
+@media (min-width: 866px) and (max-width: 1225px) {
+    .main-content-layout {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .left-content-wrapper,
+    .right-content-wrapper {
+        max-width: 100%;
         width: 100%;
         margin-left: 0;
         margin-bottom: 24px;

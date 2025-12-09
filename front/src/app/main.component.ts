@@ -105,6 +105,7 @@ export class MainComponent implements OnInit {
     this.attemptService.clearAttempts().subscribe({
       next: () => {
         this.attempts = [];
+        this.graphPoints = [];
         this.totalAttempts = 0;
       },
       error: (error: any) => {

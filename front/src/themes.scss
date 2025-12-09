@@ -1,9 +1,7 @@
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
-// Подключаем core стили
 @include mat.core();
 
-// --- Светлая тема ---
 $light-theme: mat.define-theme((
   color: (
     primary: mat.$cyan-palette,
@@ -20,7 +18,6 @@ $light-theme: mat.define-theme((
   color-scheme: light;
 }
 
-// --- Тёмная тема ---
 $dark-theme: mat.define-theme((
   color: (
     primary: mat.$cyan-palette,
